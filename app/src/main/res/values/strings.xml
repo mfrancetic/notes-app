@@ -12,4 +12,5 @@
     <string name="note_deleted">The note has been deleted</string>
     <string name="note_added">The note has been added</string>
     <string name="note_updated">The note has been updated</string>
+    <string name="note_content_description">Note image</string>
 </resources>

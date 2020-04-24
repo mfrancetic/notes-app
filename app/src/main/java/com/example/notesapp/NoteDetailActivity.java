@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -34,6 +35,8 @@ public class NoteDetailActivity extends AppCompatActivity {
     private void setupNoteDetailView() {
         editNoteView = findViewById(R.id.note_edit_text);
         ImageButton saveNoteButton = findViewById(R.id.note_save_button);
+
+        saveNoteButton.setBackgroundResource(R.mipmap.ic_confirm);
 
         saveNoteButton.setOnClickListener(new View.OnClickListener() {
             @Override

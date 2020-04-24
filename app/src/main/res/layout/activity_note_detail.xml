@@ -26,8 +26,8 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/save_note"
             android:src="@mipmap/ic_confirm"
-            android:backgroundTint="@color/colorBackground"
             app:layout_constraintEnd_toEndOf="parent"
+            android:background="?android:selectableItemBackground"
             app:layout_constraintTop_toTopOf="@id/note_edit_text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

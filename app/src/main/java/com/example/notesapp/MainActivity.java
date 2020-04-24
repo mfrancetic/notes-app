@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
     private ImageView emptyImageView;
     private TextView emptyTextView;
+    private ImageView noteImageView;
     private FloatingActionButton floatingActionButton;
 
     @Override
@@ -54,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         emptyImageView = findViewById(R.id.empty_image_view);
         emptyTextView = findViewById(R.id.empty_text_view);
+        noteImageView = findViewById(R.id.note_image_view);
         floatingActionButton = findViewById(R.id.fab);
 
         updateEmptyView();
