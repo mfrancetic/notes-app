@@ -14,8 +14,9 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:autofillHints="@string/edit_note"
-        tools:text="Note 1" />
+        android:hint="@string/add_note_text"
+        android:inputType="text"
+        android:autofillHints="@string/add_note_text" />
 
     <ImageButton
         android:id="@+id/note_save_button"

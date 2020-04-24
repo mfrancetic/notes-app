@@ -14,6 +14,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -21,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<String> notesList;
     private RecyclerView.Adapter adapter;
+    private ImageView emptyImageView;
+    private TextView emptyTextView;
+    private FloatingActionButton floatingActionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,16 +37,33 @@ public class MainActivity extends AppCompatActivity {
 
         getNotesList();
         setupRecyclerView();
+        setupFab();
+    }
+
+    private void setupFab() {
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDetailActivity(-1);
+            }
+        });
     }
 
     private void getNotesList() {
         notesList = SharedPreferencesHelper.getNoteListFromSharedPreferences(this);
+
+        emptyImageView = findViewById(R.id.empty_image_view);
+        emptyTextView = findViewById(R.id.empty_text_view);
+        floatingActionButton = findViewById(R.id.fab);
+
         if (notesList.isEmpty()) {
-            notesList.add("Note 1");
-            notesList.add("Note 2");
-            notesList.add("Note 3");
+            emptyTextView.setVisibility(View.VISIBLE);
+            emptyImageView.setVisibility(View.VISIBLE);
+        } else {
+            SharedPreferencesHelper.saveNoteListToSharedPreferences(notesList, this);
+            emptyImageView.setVisibility(View.GONE);
+            emptyTextView.setVisibility(View.GONE);
         }
-        SharedPreferencesHelper.saveNoteListToSharedPreferences(notesList, this);
     }
 
     private void setupRecyclerView() {
