@@ -1,11 +1,13 @@
 package com.example.notesapp;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private ArrayList<String> notesList;
+    private RecyclerView.Adapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +51,14 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        RecyclerView.Adapter adapter = new NotesAdapter(notesList, onClickListener);
+        NotesAdapter.RecyclerViewLongClickListener onLongClickListener = new NotesAdapter.RecyclerViewLongClickListener() {
+            @Override
+            public void onLongClick(View view, int position) {
+                openDeleteNoteDialog(position);
+            }
+        };
+
+        adapter = new NotesAdapter(notesList, onClickListener, onLongClickListener);
         notesRecyclerView.setAdapter(adapter);
 
         notesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -56,6 +66,23 @@ public class MainActivity extends AppCompatActivity {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(notesRecyclerView.getContext(),
                 LinearLayoutManager.VERTICAL);
         notesRecyclerView.addItemDecoration(dividerItemDecoration);
+    }
+
+    private void openDeleteNoteDialog(final int position) {
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_menu_delete)
+                .setTitle(getString(R.string.delete_note_title))
+                .setMessage(getString(R.string.delete_note_message))
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        notesList.remove(position);
+                        SharedPreferencesHelper.saveNoteListToSharedPreferences(notesList, MainActivity.this);
+                        adapter.notifyItemRemoved(position);
+                    }
+                })
+                .setNegativeButton(getString(R.string.no), null)
+                .show();
     }
 
     @Override

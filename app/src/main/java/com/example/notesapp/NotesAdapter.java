@@ -16,10 +16,13 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 
     private ArrayList<String> notesList;
     private RecyclerViewClickListener onClickListener;
+    private RecyclerViewLongClickListener onLongClickListener;
 
-    public NotesAdapter(ArrayList<String> notesList, RecyclerViewClickListener onClickListener) {
+    public NotesAdapter(ArrayList<String> notesList, RecyclerViewClickListener onClickListener,
+                        RecyclerViewLongClickListener onLongClickListener) {
         this.notesList = notesList;
         this.onClickListener = onClickListener;
+        this.onLongClickListener = onLongClickListener;
     }
 
     @NonNull
@@ -29,7 +32,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View notesView = layoutInflater.inflate(R.layout.notes_recycler_view_item, parent, false);
 
-        return new ViewHolder(notesView, onClickListener);
+        return new ViewHolder(notesView, onClickListener, onLongClickListener);
     }
 
     @Override
@@ -53,20 +56,24 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         void onClick(View view, int position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public interface RecyclerViewLongClickListener {
+        void onLongClick(View view, int position);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
+            View.OnLongClickListener {
 
         public TextView noteTextView;
         public ImageView notesImageView;
 
-        // We also create a constructor that accepts the entire item row
-        // and does the view lookups to find each subview
-        public ViewHolder(View itemView, RecyclerViewClickListener listener) {
+        public ViewHolder(View itemView, RecyclerViewClickListener listener, RecyclerViewLongClickListener longClickListener) {
             // Stores the itemView in a public final member variable that can be used
             // to access the context from any ViewHolder instance.
             super(itemView);
 
             onClickListener = listener;
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
 
             noteTextView = itemView.findViewById(R.id.note_text_view);
             notesImageView = itemView.findViewById(R.id.note_image_view);
@@ -76,5 +83,11 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         public void onClick(View v) {
             onClickListener.onClick(v, getAdapterPosition());
         }
+
+        @Override
+        public boolean onLongClick(View v) {
+            onLongClickListener.onLongClick(v, getAdapterPosition());
+            return true;
+        }
     }
-};
+}
