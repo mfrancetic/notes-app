@@ -9,4 +9,7 @@
     <string name="no">No</string>
     <string name="add_note_text">Add a note</string>
     <string name="no_notes">No notes added yet</string>
+    <string name="note_deleted">The note has been deleted</string>
+    <string name="note_added">The note has been added</string>
+    <string name="note_updated">The note has been updated</string>
 </resources>

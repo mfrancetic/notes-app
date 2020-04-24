@@ -1,12 +1,16 @@
 package com.example.notesapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -39,10 +43,11 @@ public class NoteDetailActivity extends AppCompatActivity {
                 if (notePosition != -1) {
                     notesList.remove(notePosition);
                     notesList.add(notePosition, newNoteText);
+                    Toast.makeText(NoteDetailActivity.this, getString(R.string.note_updated), Toast.LENGTH_SHORT).show();
                 } else {
                     notesList.add(newNoteText);
+                    Toast.makeText(NoteDetailActivity.this, getString(R.string.note_added), Toast.LENGTH_SHORT).show();
                 }
-
                 Intent backToDetailActivityIntent = new Intent(NoteDetailActivity.this, MainActivity.class);
                 SharedPreferencesHelper.saveNoteListToSharedPreferences(notesList, NoteDetailActivity.this);
                 startActivity(backToDetailActivityIntent);

@@ -14,9 +14,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -56,14 +56,7 @@ public class MainActivity extends AppCompatActivity {
         emptyTextView = findViewById(R.id.empty_text_view);
         floatingActionButton = findViewById(R.id.fab);
 
-        if (notesList.isEmpty()) {
-            emptyTextView.setVisibility(View.VISIBLE);
-            emptyImageView.setVisibility(View.VISIBLE);
-        } else {
-            SharedPreferencesHelper.saveNoteListToSharedPreferences(notesList, this);
-            emptyImageView.setVisibility(View.GONE);
-            emptyTextView.setVisibility(View.GONE);
-        }
+        updateEmptyView();
     }
 
     private void setupRecyclerView() {
@@ -95,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void openDeleteNoteDialog(final int position) {
         new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_menu_delete)
+                .setIcon(R.mipmap.ic_delete)
                 .setTitle(getString(R.string.delete_note_title))
                 .setMessage(getString(R.string.delete_note_message))
                 .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
@@ -104,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
                         notesList.remove(position);
                         SharedPreferencesHelper.saveNoteListToSharedPreferences(notesList, MainActivity.this);
                         adapter.notifyItemRemoved(position);
+                        Toast.makeText(MainActivity.this, getString(R.string.note_deleted), Toast.LENGTH_SHORT).show();
+                        updateEmptyView();
                     }
                 })
                 .setNegativeButton(getString(R.string.no), null)
@@ -132,5 +127,15 @@ public class MainActivity extends AppCompatActivity {
         Intent openDetailActivityIntent = new Intent(MainActivity.this, NoteDetailActivity.class);
         openDetailActivityIntent.putExtra(Constants.NOTE_KEY, notePosition);
         startActivity(openDetailActivityIntent);
+    }
+
+    private void updateEmptyView(){
+        if (notesList.isEmpty()) {
+            emptyTextView.setVisibility(View.VISIBLE);
+            emptyImageView.setVisibility(View.VISIBLE);
+        } else {
+            emptyImageView.setVisibility(View.GONE);
+            emptyTextView.setVisibility(View.GONE);
+        }
     }
 }
