@@ -15,9 +15,11 @@ import java.util.ArrayList;
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> {
 
     private ArrayList<String> notesList;
+    private RecyclerViewClickListener onClickListener;
 
-    public NotesAdapter(ArrayList<String> notesList) {
+    public NotesAdapter(ArrayList<String> notesList, RecyclerViewClickListener onClickListener) {
         this.notesList = notesList;
+        this.onClickListener = onClickListener;
     }
 
     @NonNull
@@ -27,8 +29,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View notesView = layoutInflater.inflate(R.layout.notes_recycler_view_item, parent, false);
 
-        ViewHolder viewHolder = new ViewHolder(notesView);
-        return viewHolder;
+        return new ViewHolder(notesView, onClickListener);
     }
 
     @Override
@@ -41,23 +42,39 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return notesList.size();
+        if (notesList != null) {
+            return notesList.size();
+        } else {
+            return 0;
+        }
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public interface RecyclerViewClickListener {
+        void onClick(View view, int position);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView noteTextView;
         public ImageView notesImageView;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, RecyclerViewClickListener listener) {
             // Stores the itemView in a public final member variable that can be used
             // to access the context from any ViewHolder instance.
             super(itemView);
 
+            onClickListener = listener;
+            itemView.setOnClickListener(this);
+
             noteTextView = itemView.findViewById(R.id.note_text_view);
             notesImageView = itemView.findViewById(R.id.note_image_view);
+        }
+
+        @Override
+        public void onClick(View v) {
+            onClickListener.onClick(v, getAdapterPosition());
         }
     }
 };
